@@ -58,8 +58,7 @@ export class SchedulerGridComponent {
 		let array = [];
 		for (let hour = this.config.startHour; hour <= this.config.endHour; hour++) {
 				const time = new Date();
-				time.setHours(hour, 0, 0, 0); // Set hour and minute, clear seconds/milliseconds
-				// Format the time as "HH:MM AM/PM"
+				time.setHours(hour, 0, 0, 0);
 				const formattedTime = time.toLocaleTimeString([], {
 				hour: '2-digit',
 				minute: '2-digit',
