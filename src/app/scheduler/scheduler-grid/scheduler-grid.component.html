@@ -1,0 +1,54 @@
+<div #grid class="container-fluid">
+	<div class="row tableCls" style="position: relative;">
+		<table class="col-md-12">
+			<thead>
+				<tr class="row pb-2">
+					<th class="col-md-1"></th>
+					<th class="col text-center" *ngFor="let res of resources">
+						<div>
+							<i class="bi bi-person-circle fs-3"></i>
+						</div>
+						{{res.name}}
+					</th>
+				</tr>
+			</thead>
+			<tbody class="row">
+				<div class="scheduler-wrapper" style="position: relative;">
+					<div
+						class="current-time-line"
+						[style.top.px]="getTopOffset()"
+					></div>
+					<ng-container *ngFor="let hour of timeSlots">
+						<tr class="row">
+							<td class="col-md-1" [style.height.px]="(config.pxPerMinute * 60)">{{hour}}</td>
+							<td class="col" *ngFor="let res of resources">
+								<tr class="row slot" *ngFor="let slot of [].constructor(60/config.slotMinutes); let si = index"
+								[style.height.px]="(config.slotMinutes * config.pxPerMinute)">
+									<td class="" 
+										(click)="book(res, getTime(hour, si))">
+										<ng-container *ngIf="isBooked(res, getTime(hour, si))">
+											{{ getAppointment(res, getTime(hour, si)).type }}
+										</ng-container>
+										 <!-- <div *ngFor="let app of getSlotAppointments(hour, si,res)" class="appointment">
+											{{ app }}
+										</div> -->
+										<!-- <ng-container *ngFor="let app of appointments">
+											<div class="appointment" [style.gridRowStart]="getSlotPosition(app).rowStartIndex + 1"
+												[style.gridRowEnd]="'span ' + getSlotPosition(app).durationSlots"
+												[style.gridColumn]="resources.indexOf(app.resourceId) + 2">
+												{{app.resourceId}}
+											</div>
+										</ng-container> -->
+									</td>
+								</tr>
+							</td>
+						</tr>
+					</ng-container>
+				</div>
+			</tbody>
+		</table>
+		<!-- <div class="calendar" [style.top.px]="getTopOffset()">
+			<div class="current-time-line" ></div>
+		</div> -->
+	</div>
+</div>

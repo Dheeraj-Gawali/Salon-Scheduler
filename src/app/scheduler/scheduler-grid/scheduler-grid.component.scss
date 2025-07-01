@@ -1,0 +1,28 @@
+.current-time-line {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: red;
+	z-index: 10;
+	/* Above other content */
+}
+
+.tableCls {
+	padding: 10px;
+	border: 1px solid black;
+	border-radius: 10px;
+
+	.slot {
+		border: 1px solid #eee;
+	}
+
+	.appointment {
+		position: absolute;
+		background: #4caf50;
+		color: white;
+		border-radius: 4px;
+		padding: 2px;
+		font-size: 0.8em;
+	}
+}
