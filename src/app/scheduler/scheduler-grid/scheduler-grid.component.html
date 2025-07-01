@@ -16,7 +16,7 @@
 				<div class="scheduler-wrapper" style="position: relative;">
 					<div
 						class="current-time-line"
-						[style.top.px]="getTopOffset()"
+						[style.top.px]="currentTimeTop"
 					></div>
 					<ng-container *ngFor="let hour of timeSlots">
 						<tr class="row">
@@ -26,17 +26,18 @@
 								[style.height.px]="(config.slotMinutes * config.pxPerMinute)">
 									<td class="" 
 										(click)="book(res, getTime(hour, si))">
-										<ng-container *ngIf="isBooked(res, getTime(hour, si))">
+										<ng-container *ngIf="isBooked(res, getTime(hour, si))" [style.height.px]="(config.slotMinutes * config.pxPerMinute)">
 											{{ getAppointment(res, getTime(hour, si)).type }}
+											{{ getAppointment(res, getTime(hour, si)).title }}
 										</ng-container>
 										 <!-- <div *ngFor="let app of getSlotAppointments(hour, si,res)" class="appointment">
 											{{ app }}
 										</div> -->
 										<!-- <ng-container *ngFor="let app of appointments">
-											<div class="appointment" [style.gridRowStart]="getSlotPosition(app).rowStartIndex + 1"
+											<div *ngIf="app.resourceId === res.id" class="appointment" [style.gridRowStart]="getSlotPosition(app).rowStartIndex + 1"
 												[style.gridRowEnd]="'span ' + getSlotPosition(app).durationSlots"
 												[style.gridColumn]="resources.indexOf(app.resourceId) + 2">
-												{{app.resourceId}}
+												{{app.title}}
 											</div>
 										</ng-container> -->
 									</td>

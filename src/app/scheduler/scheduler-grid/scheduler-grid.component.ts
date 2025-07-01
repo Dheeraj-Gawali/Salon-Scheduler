@@ -23,7 +23,7 @@ export class SchedulerGridComponent {
 	public totalMinutes: any
 	public timeSlots: any;
 	public slotPerHour: any;
-	public currentTimeOffset: any;
+	public currentTimeTop: any;
 
 	today: Date = new Date();
   	timerId!: any;
@@ -32,6 +32,8 @@ export class SchedulerGridComponent {
 		 this.timerId = setInterval(() => this.today = new Date(), 60000); // update each minute
 		this.totalMinutes = (this.config.endHour - this.config.startHour) * 60;
 		this.generateTimeSlots();
+		this.updateCurrentTime();
+  		setInterval(() => this.updateCurrentTime(), 60_000);
 	}
 	ngOnDestroy() {
 		clearInterval(this.timerId);
@@ -68,35 +70,28 @@ export class SchedulerGridComponent {
 		}
 		this.timeSlots = array
 	}
-	getTopOffset(): number {
-		const minutes = (this.today.getHours() - 17) * 60 + this.today.getMinutes();
-		return minutes * (40 / this.config.slotMinutes);
+	updateCurrentTime(): any {
+		const mins = (this.today.getHours() - this.config.startHour) * 60 + this.today.getMinutes();
+		this.currentTimeTop = mins * this.config.pxPerMinute;
 	}
-
-	getHeightPx(): number {
-		let starDateMinute = 9 * 60 ;
-		let endDateMinute = 17 * 60 ;
-		let getHeight = ( endDateMinute - starDateMinute ) * this.config.pxPerMinute;
-		return getHeight;
-	}
-	getTime(hour: number, si: number): string {
+	getTime(hour: any, si: number): string {
 		const m = si * 15;
-		return `${hour}:${m.toString().padStart(2,'0')}`;
+		return `${hour.split(':')[0]}:${m.toString().padStart(2,'0')}`;
 	}
 
-	isBooked(res: string, time: string): boolean {
+	isBooked(res: any, time: string): boolean {
 		return this.appointments.some((a: any) =>
-			a.resource===res && a.start===time
+			a.resourceId===res.id && a.start.getHours()==time.split(':')[0]
 		);
 	}
-	getAppointment(res: string, time: string) {
+	getAppointment(res: any, time: string) {
 		return this.appointments.find((a: any) =>
-			a.resource===res && a.start===time
+			a.resourceId===res.id && a.start.getHours()==time.split(':')[0]
 		);
 	}
 	book(res: any, time: string) {
 		const title = prompt(`Appointment for ${res.name} at ${time}?`);
 		if (!title) return;
-		this.appointments.push({resource: res, start: time, duration: 15, title});
+		this.appointments.push({resource: res, start: time, duration: 15, type: title});
 	}
 }
